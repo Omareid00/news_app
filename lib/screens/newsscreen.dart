@@ -1,62 +1,91 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/api_manager/api_manager.dart';
+import 'package:news_app/api_manager/tab_bar_provider.dart';
 import 'package:news_app/cores/appcolors/appcolors.dart';
+import 'package:news_app/models/categorie_data_model.dart';
+import 'package:news_app/models/news_card_widget.dart';
+import 'package:news_app/screens/view_model/news_view_model.dart';
+import 'package:provider/provider.dart';
 
-class NewsScreen extends StatelessWidget {
+class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
 
   @override
+  State<NewsScreen> createState() => _NewsScreenState();
+}
+
+class _NewsScreenState extends State<NewsScreen> {
+  late NewsProvider newsProvider;
+  late TabBarProvider tabBarProvider;
+  @override
+  void initState() {
+    newsProvider =NewsProvider();
+    tabBarProvider =TabBarProvider();
+    super.initState();
+  }
+  int selectedTabIndex = 0;
+
+  @override
   Widget build(BuildContext context) {
+    AppCategorie category =
+        ModalRoute.of(context)?.settings.arguments as AppCategorie;
     return Scaffold(
-      appBar: AppBar(
-      ),
-      body: FutureBuilder(future: ApiManager.getNews(), builder: (context, snapshot) {
-        if(snapshot.connectionState==ConnectionState.waiting){
-          return Center(child: CircularProgressIndicator(),);
-        }
-        else if(snapshot.hasError){
-          return Center(child: Text("Error"),);
-        }
-        else{
-          var article = snapshot.data??[];
+      appBar: AppBar(title: Text(category.name),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: ChangeNotifierProvider(
+          create: (context) => TabBarProvider(),
+          child: Consumer<TabBarProvider>(
+            builder: (context, vm, child) {
+              return DefaultTabController(
+                length: vm.sources.length,
+                child: Column(
+                  children: [
+                    TabBar(
+                      tabAlignment: TabAlignment.start,
+                      onTap: (value) {
+                        selectedTabIndex = value;
+                        newsProvider.getNews(vm.sources[value].id??"");
+                      },
+                      isScrollable: true,
+                      indicatorColor: AppColors.black,
+                      labelColor: AppColors.black,
+                      unselectedLabelColor: AppColors.black,
+                      dividerColor: Colors.transparent,
 
-          return ListView.builder(itemCount:article.length ,
-            itemBuilder: (context, index) {
-            return Container(
-              padding: const EdgeInsets.all(8.0),
-              margin: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.black),
-                borderRadius: BorderRadius.circular(10),
+                      tabs: vm.sources.map((e) {
+                        return Tab(text: e.name ?? "");
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              );
 
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.network(article[index].urlToImage??"",
-                      errorBuilder: (context, error, stackTrace) {
-                        return SizedBox(
-                          height: 50,
-                          child: Icon(Icons.error),
-                        );
-                      },)),
-                  Text(article[index].title??""),
-                  Row(
+            },
+          ),
+        ),
+      ),),
+      body: ChangeNotifierProvider(
+        create: (context) => newsProvider..getNews(null,category.id),
+        child: Consumer<NewsProvider>(
+          builder: (context, vm, _) {
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: vm.articles.length,
+                    itemBuilder: (context, index) {
+                      return NewsCardWidget(article: vm.articles[index]);
+                    },
 
-                    children: [
-                      Text(article[index].author??""),
-                      Spacer(),
-                      Text(article[index].publishedAt??""),
-                    ],
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             );
-          },);
-        }
-      },),
+
+
+          },
+        ),
+      )
     );
   }
 }
