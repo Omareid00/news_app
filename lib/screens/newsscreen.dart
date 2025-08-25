@@ -26,14 +26,15 @@ class _NewsScreenState extends State<NewsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AppCategorie category =
-        ModalRoute.of(context)?.settings.arguments as AppCategorie;
+    AppCategorie category = ModalRoute.of(context)?.settings.arguments as AppCategorie;
     return Scaffold(
-      appBar: AppBar(title: Text(category.name),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(category.name),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: ChangeNotifierProvider(
-          create: (context) => TabBarProvider(),
+          create: (context) => TabBarProvider()..getSources(category.id),
           child: Consumer<TabBarProvider>(
             builder: (context, vm, child) {
               return DefaultTabController(
