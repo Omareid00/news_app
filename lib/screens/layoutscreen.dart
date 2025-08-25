@@ -32,14 +32,27 @@ class _LayoutScreenState extends State<LayoutScreen> {
                 child: DrawerHeader(
                   margin: EdgeInsets.all(0),
                   decoration: BoxDecoration(
-                    color: AppColors.black,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(0),
 
                   ),
-                    child:Center(child: Text("Home",style: TextStyle(color: AppColors.white,)) ),
+                    child:Center(child: Text("News App",style: theme.textTheme.bodyLarge) ),
               ),
               ),
             ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.home),
+                    TextButton(onPressed: () =>Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LayoutScreen())) , child: Text("Go To Home",style: theme.textTheme.bodyLarge,))
+                  ],
+                ),
+              ],
+            ),
           )
         ],),
       ),
