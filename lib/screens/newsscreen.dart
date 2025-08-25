@@ -38,14 +38,19 @@ class _NewsScreenState extends State<NewsScreen> {
           child: Consumer<TabBarProvider>(
             builder: (context, vm, child) {
               return DefaultTabController(
-                length: vm.sources.length,
+                length: vm.sources.length+1,
                 child: Column(
                   children: [
                     TabBar(
                       tabAlignment: TabAlignment.start,
                       onTap: (value) {
+                        if(value == 0){
+                          newsProvider.getNews(null,category.id);
+
+                        }else{
+                          newsProvider.getNews(vm.sources[value-1].id);
+                        }
                         selectedTabIndex = value;
-                        newsProvider.getNews(vm.sources[value].id??"");
                       },
                       isScrollable: true,
                       indicatorColor: AppColors.black,
@@ -53,9 +58,13 @@ class _NewsScreenState extends State<NewsScreen> {
                       unselectedLabelColor: AppColors.black,
                       dividerColor: Colors.transparent,
 
-                      tabs: vm.sources.map((e) {
-                        return Tab(text: e.name ?? "");
-                      }).toList(),
+                      tabs: [
+                        Text("Headline"),
+                        ... vm.sources.map((e) {
+                          return Tab(text: e.name ?? "");
+                        }),
+
+                      ]
                     ),
                   ],
                 ),
