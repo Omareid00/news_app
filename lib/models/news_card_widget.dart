@@ -1,13 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/models/news_model.dart';
 
 import '../cores/appcolors/appcolors.dart';
 
 class NewsCardWidget extends StatelessWidget {
-  const NewsCardWidget({
-    super.key,
-    required this.article,
-  });
+  const NewsCardWidget({super.key, required this.article});
 
   final Articles article;
 
@@ -21,30 +19,26 @@ class NewsCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.network(
-              article.urlToImage ?? "",
-              errorBuilder:
-                  (context, error, stackTrace) {
-                return SizedBox(
-                  height: 50,
-                  child: Icon(Icons.error),
-                );
-              },
+          InkWell(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: CachedNetworkImage(
+                imageUrl: article.urlToImage ?? "",
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) =>
+                    const Center(child: Icon(Icons.error)),
+              ),
             ),
           ),
           Text(article.title ?? ""),
           Row(
             children: [
               Expanded(child: Text(article.author ?? "")),
-              SizedBox(width: 10,),
-              Text(
-                article.publishedAt ?.substring(0,10)?? "",
-              ),
+              SizedBox(width: 10),
+              Text(article.publishedAt?.substring(0, 10) ?? ""),
             ],
           ),
         ],
