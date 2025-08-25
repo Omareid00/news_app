@@ -102,7 +102,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
                             CircleAvatar(
                               radius: 25,
                               backgroundColor: AppColors.white,
-                              child: Icon(Icons.arrow_forward_ios_rounded,color: AppColors.black,),
+                              child: index % 2 == 0 ?Icon(Icons.arrow_forward_ios_rounded,color: AppColors.black,) : Icon(Icons.arrow_back_ios_rounded,color: AppColors.black,),
                             )
                           ],
                         ),
