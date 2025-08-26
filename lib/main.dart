@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/cores/app_routes/app_routes.dart';
-import 'package:news_app/screens/splashscreen.dart';
+import 'package:news_app/screens/presentation/splashscreen.dart';
 
 void main() {
   runApp(const MyApp());

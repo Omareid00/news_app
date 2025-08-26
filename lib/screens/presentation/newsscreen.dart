@@ -3,7 +3,7 @@ import 'package:news_app/api_manager/tab_bar_provider.dart';
 import 'package:news_app/cores/appcolors/appcolors.dart';
 import 'package:news_app/models/categorie_data_model.dart';
 import 'package:news_app/models/news_card_widget.dart';
-import 'package:news_app/screens/view_model/news_view_model.dart';
+import 'package:news_app/screens/presentation/view_model/news_view_model.dart';
 import 'package:provider/provider.dart';
 
 class NewsScreen extends StatefulWidget {

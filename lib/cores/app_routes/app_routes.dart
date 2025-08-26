@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:news_app/screens/layoutscreen.dart';
-import 'package:news_app/screens/newsscreen.dart';
-import 'package:news_app/screens/splashscreen.dart';
+import 'package:news_app/screens/presentation/layoutscreen.dart';
+import 'package:news_app/screens/presentation/newsscreen.dart';
+import 'package:news_app/screens/presentation/splashscreen.dart';
 class APPROUTES{
   APPROUTES._();
   static const String splash="Splash";
