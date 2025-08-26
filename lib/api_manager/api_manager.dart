@@ -7,7 +7,7 @@ class ApiManager {
   static const String baseUrl = 'https://newsapi.org/v2/';
   static const String apiKey = 'apiKey=94637d84d8a04eb788af970acb6868ec';
 
-  static Future<List<Articles>> getNews(String? source, String? category)async{
+  static Future<List<Articles>> getNews([String? source, String? category])async{
     var url = Uri.parse("${baseUrl}top-headlines?$apiKey${source == null?"" :"&sources=$source"}${category == null?"" :"&category=$category"}");
     var response = await http.get(url);
     var json =jsonDecode(response.body);

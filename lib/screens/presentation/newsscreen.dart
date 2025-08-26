@@ -32,7 +32,7 @@ class _NewsScreenState extends State<NewsScreen> {
         centerTitle: true,
         title: Text(category.name),
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(50),
         child: ChangeNotifierProvider(
           create: (context) => TabBarProvider()..getSources(category.id),
           child: Consumer<TabBarProvider>(
