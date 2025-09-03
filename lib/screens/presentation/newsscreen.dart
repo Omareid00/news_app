@@ -35,6 +35,9 @@ class _NewsScreenState extends State<NewsScreen> {
         ModalRoute.of(context)?.settings.arguments as AppCategorie;
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.search))
+        ],
         centerTitle: true,
         title: Text(category.name),
         bottom: PreferredSize(
@@ -87,51 +90,50 @@ class _NewsScreenState extends State<NewsScreen> {
           ),
         ),
       ),
-      body: Expanded(
-        child: BlocProvider<NewsCubit>(
-          create: (context) => newsCubit..getNews(null, category.id),
-          child: BlocConsumer<NewsCubit, NewsStates>(
-            builder: (context, state) {
-              if (state is GetNewsLoadingState) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is GetNewsErrorState) {
-                return Center(child: Text(state.error));
-              } else if (state is GetNewsSuccessState) {
-                return Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: state.articles.length,
-                        itemBuilder: (context, index) {
-                          return NewsCardWidget(article: state.articles[index]);
-                        },
-                      ),
+      body: BlocProvider<NewsCubit>(
+        create: (context) => newsCubit..getNews(null, category.id),
+        child: BlocConsumer<NewsCubit, NewsStates>(
+          builder: (context, state) {
+            if (state is GetNewsLoadingState) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is GetNewsErrorState) {
+              return Center(child: Text(state.error));
+            } else if (state is GetNewsSuccessState) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.articles.length,
+                      itemBuilder: (context, index) {
+                        return
+                          NewsCardWidget(article: state.articles[index]);
+                      },
                     ),
-                  ],
-                );
-              }
-              return const SizedBox();
-            },
-            buildWhen: (previous, current) {
-              return (current is GetNewsSuccessState ||
-                  current is GetNewsErrorState ||
-                  current is GetNewsLoadingState);
-            },
+                  ),
+                ],
+              );
+            }
+            return const SizedBox();
+          },
+          buildWhen: (previous, current) {
+            return (current is GetNewsSuccessState ||
+                current is GetNewsErrorState ||
+                current is GetNewsLoadingState);
+          },
 
-            listener: (BuildContext context, NewsStates state) {
-              if (state is GetNewsLoadingState) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return const AlertDialog();
-                  },
-                );
-              }
-              // if(state is SuccessState){
-              //   Navigator.pop(context);
-              // }
-            },
-          ),
+          listener: (BuildContext context, NewsStates state) {
+            if (state is GetNewsLoadingState) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return const AlertDialog();
+                },
+              );
+            }
+            // if(state is SuccessState){
+            //   Navigator.pop(context);
+            // }
+          },
         ),
       ),
     );
