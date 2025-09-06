@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/api_manager/tab_bar_provider.dart';
+import 'package:news_app/cores/app_routes/app_routes.dart';
 import 'package:news_app/cores/appcolors/appcolors.dart';
 import 'package:news_app/models/categorie_data_model.dart';
 import 'package:news_app/models/news_card_widget.dart';
 import 'package:news_app/screens/presentation/cubit/news_cubit.dart';
 import 'package:news_app/screens/presentation/cubit/news_states.dart';
-import 'package:provider/provider.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -36,7 +36,9 @@ class _NewsScreenState extends State<NewsScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.search))
+          IconButton(onPressed: (){
+            Navigator.pushNamed(context, APPROUTES.SearchScreen);
+          }, icon: Icon(Icons.search))
         ],
         centerTitle: true,
         title: Text(category.name),

@@ -22,7 +22,7 @@ class NewsRepoImp implements NewsRepo {
       var response = await remoteDataSource.getNews(source, category);
       var json = jsonDecode(response.body);
       await localDataSource.saveSources(json);
-      var data = NewsModel.fromJson(json);
+      var data = ArticlesResponse.fromJson(json);
       return data.articles ?? [];
     } else {
       localDataSource = LocalDataImp();

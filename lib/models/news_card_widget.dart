@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/models/news_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../cores/appcolors/appcolors.dart';
 
 class NewsCardWidget extends StatelessWidget {
@@ -85,7 +86,12 @@ class NewsCardWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 FilledButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    launchUrl(
+                      Uri.parse(article.url??""),
+                      mode: LaunchMode.inAppWebView,
+                    );
+                  },
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
