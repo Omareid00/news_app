@@ -1,13 +1,15 @@
 
 import 'package:flutter/material.dart';
-import 'package:news_app/screens/layoutscreen.dart';
-import 'package:news_app/screens/newsscreen.dart';
-import 'package:news_app/screens/splashscreen.dart';
+import 'package:news_app/screens/presentation/layoutscreen.dart';
+import 'package:news_app/screens/presentation/newsscreen.dart';
+import 'package:news_app/screens/presentation/search/search_screen.dart';
+import 'package:news_app/screens/presentation/splashscreen.dart';
 class APPROUTES{
   APPROUTES._();
   static const String splash="Splash";
   static const String layoutScreen="LayoutScreen";
   static const String newsScreen="NewsScreen";
+  static const String SearchScreen="SearchScreen";
 
 
 
@@ -18,6 +20,7 @@ class ROUTES{
     APPROUTES.splash :(_)=> Splashscreen(),
     APPROUTES.layoutScreen :(_)=> LayoutScreen(),
     APPROUTES.newsScreen :(_)=> NewsScreen(),
+    APPROUTES.SearchScreen :(_)=> SearchScreen(),
 
 
   };

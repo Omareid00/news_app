@@ -3,26 +3,58 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:news_app/models/news_model.dart';
 
-class ApiManager {
-  static const String _baseUrl = 'https://newsapi.org/v2/';
+abstract class ApiManager {
+  static const String baseUrl = 'https://newsapi.org/v2/';
   static const String apiKey = 'apiKey=94637d84d8a04eb788af970acb6868ec';
+  static const String everything = '/v2/everything';
 
-  static Future<List<Articles>> getNews(String? source, String? category)async{
-    var url = Uri.parse("${_baseUrl}top-headlines?$apiKey${source == null?"" :"&sources=$source"}${category == null?"" :"&category=$category"}");
+  static Future<List<Articles>> getNews([
+    String? source,
+    String? category,
+  ]) async {
+    var url = Uri.parse(
+      "${baseUrl}top-headlines?$apiKey${source == null ? "" : "&sources=$source"}${category == null ? "" : "&category=$category"}",
+    );
     var response = await http.get(url);
-    var json =jsonDecode(response.body);
-    var data = NewsModel.fromJson(json);
-    return data.articles??[];
+    var json = jsonDecode(response.body);
+    var data = ArticlesResponse.fromJson(json);
+    return data.articles ?? [];
   }
+
   static Future<List<Source>> getSources(String category) async {
     List<Source> sources = [];
-    var url = Uri.parse("${_baseUrl}top-headlines/sources?$apiKey&category=$category");
+    var url = Uri.parse(
+      "${baseUrl}top-headlines/sources?$apiKey&category=$category",
+    );
     var response = await http.get(url);
-    var json =jsonDecode(response.body);
-    for(var e in json["sources"]){
+    var json = jsonDecode(response.body);
+    for (var e in json["sources"]) {
       sources.add(Source.fromJson(e));
     }
     return sources;
+  }
+
+  static Future<ArticlesResponse> searchArticle({
+    required String searchQuery,
+    required int pageNumber,
+  }) async {
+    Map<String, dynamic> queryParameters = {
+      "q": searchQuery,
+      "page": pageNumber.toString(),
+      "pageSize": "10",
+      "apiKey": apiKey,
+    };
+
+    final response = await http.get(
+      Uri.https(baseUrl, everything, queryParameters),
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return ArticlesResponse.fromJson(data);
+    } else {
+      throw Exception("Failed to load articles");
+    }
   }
 
 }

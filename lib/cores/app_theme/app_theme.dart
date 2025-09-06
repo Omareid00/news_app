@@ -16,8 +16,8 @@ class AppTheme {
         color: Colors.white,
       ),
       bodyLarge: TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.w600,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
     );
