@@ -7,4 +7,5 @@ class AppImages {
   static String sciense = "assets/images/sciense.png";
   static String sports = "assets/images/sports.png";
   static String technology = "assets/images/technology.png";
+  static String golbalIcon = "assets/images/icon.png";
 }

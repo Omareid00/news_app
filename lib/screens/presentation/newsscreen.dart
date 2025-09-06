@@ -1,12 +1,15 @@
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/api_manager/tab_bar_provider.dart';
 import 'package:news_app/cores/app_routes/app_routes.dart';
 import 'package:news_app/cores/appcolors/appcolors.dart';
+import 'package:news_app/cores/appimages/app_images.dart';
 import 'package:news_app/models/categorie_data_model.dart';
 import 'package:news_app/models/news_card_widget.dart';
 import 'package:news_app/screens/presentation/cubit/news_cubit.dart';
 import 'package:news_app/screens/presentation/cubit/news_states.dart';
+import 'package:news_app/screens/presentation/layoutscreen.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -33,12 +36,135 @@ class _NewsScreenState extends State<NewsScreen> {
   Widget build(BuildContext context) {
     AppCategorie category =
         ModalRoute.of(context)?.settings.arguments as AppCategorie;
+    var theme = Theme.of(context);
+    final List<String> themes = ['Light', 'Dark'];
+    final List<String> languageList  = ['English', 'Arabic'];
     return Scaffold(
+      drawer: Drawer(
+        child: Container(
+          color: AppColors.black,
+          child: Column(
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(color: AppColors.white),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          "News App",
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontSize: 24,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.home, color: AppColors.white),
+                        TextButton(
+                          onPressed: () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LayoutScreen(),
+                            ),
+                          ),
+                          child: Text(
+                            "Go To Home",
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: AppColors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(color: AppColors.white),
+                    SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.imagesearch_roller_sharp,
+                          color: AppColors.white,
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          "Theme",
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    CustomDropdown<String>(
+                      decoration: CustomDropdownDecoration(
+                        headerStyle: TextStyle(color: AppColors.white),
+                        closedFillColor: AppColors.black,
+                        closedBorder: Border.all(color: AppColors.white),
+                        closedSuffixIcon: Icon(
+                          Icons.arrow_drop_down,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      items: themes,
+                      onChanged: (value) {},
+                    ),
+                    SizedBox(height: 20),
+                    Divider(color: AppColors.white),
+
+                    SizedBox(height: 20),
+                    Row(
+                      children: [
+                        ImageIcon(
+                          AssetImage(AppImages.golbalIcon),
+                          color: AppColors.white,
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          "Language",
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    CustomDropdown<String>(
+                      decoration: CustomDropdownDecoration(
+                        headerStyle: TextStyle(color: AppColors.white),
+                        closedFillColor: AppColors.black,
+                        closedBorder: Border.all(color: AppColors.white),
+                        closedSuffixIcon: Icon(
+                          Icons.arrow_drop_down,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      items: languageList,
+                      onChanged: (value) {},
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: (){
-            Navigator.pushNamed(context, APPROUTES.SearchScreen);
-          }, icon: Icon(Icons.search))
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, APPROUTES.SearchScreen);
+            },
+            icon: Icon(Icons.search),
+          ),
         ],
         centerTitle: true,
         title: Text(category.name),
@@ -107,8 +233,7 @@ class _NewsScreenState extends State<NewsScreen> {
                     child: ListView.builder(
                       itemCount: state.articles.length,
                       itemBuilder: (context, index) {
-                        return
-                          NewsCardWidget(article: state.articles[index]);
+                        return NewsCardWidget(article: state.articles[index]);
                       },
                     ),
                   ),
